@@ -1,48 +1,47 @@
+<!-- Component templeate -->
 <template>
     <div>
+        <!-- Shoping cart box -->
         <div class="top_title">My Cart</div>
-            <div class="container">
-                <div id="lessons_box">
-                    <div class="lesson" v-for="(item, idx) in shopingCart" :key="idx">
-                        <div class="lesson_data">
-                            <div class="subject">
-                                <span class="title">Subject: </span>
-                                <span class="content">{{ item.subject }}</span>
-                            </div>
-                            <div class="location">
-                                <span class="title">Location: </span>
-                                <span class="content">{{ item.location }}</span>
-                            </div>
-                            <div class="price">
-                                <span class="title">Price: </span>
-                                <span class="content">£{{ item.price }}</span>
-                            </div>
-                            <div class="spaces">
-                                <span class="title">Spaces: </span>
-                                <span class="content">1</span>
-                            </div>
-                            <button class="removeBtn" v-on:click="removeItem(idx, item._id)">Remove</button>
+        <div class="container">
+            <div id="lessons_box">
+                <div class="lesson" v-for="(item, idx) in shopingCart" :key="idx">
+                    <div class="lesson_data">
+                        <div class="subject">
+                            <span class="title">Subject: </span>
+                            <span class="content">{{ item.subject }}</span>
                         </div>
-                        <div class="icon">
-                            <i v-bind:class="item.icon"></i>
+                        <div class="location">
+                            <span class="title">Location: </span>
+                            <span class="content">{{ item.location }}</span>
                         </div>
+                        <div class="price">
+                            <span class="title">Price: </span>
+                            <span class="content">£{{ item.price }}</span>
+                        </div>
+                        <div class="spaces">
+                            <span class="title">Spaces: </span>
+                            <span class="content">1</span>
+                        </div>
+                        <button class="removeBtn" v-on:click="handleRemoveItem(idx, item._id)">Remove</button>
+                    </div>
+                    <div class="icon">
+                        <i v-bind:class="item.icon"></i>
                     </div>
                 </div>
             </div>
+        </div>
 
-            <div class="central_title">Checkout</div>
-            <div class="checkout_box">
-                <div class="checkout">
-                    <input v-model="userName" v-on:keypress="isLetter" type="text" placeholder="Name">
-                    <input v-model="userPhoneNr" v-on:keypress="isNumber" type="text" placeholder="Phone Nr."> 
-                    <button  v-bind:disabled="!activeCheckout" id="checkout_btn" v-bind:class="{ 'active_btn': activeCheckout }" v-on:click="sendOrder()">Checkout</button>
-                </div>
-                <span>{{ message }}</span>
+        <!-- Checkout Box -->
+        <div class="central_title">Checkout</div>
+        <div class="checkout_box">
+            <div class="checkout">
+                <input v-model="userName" v-on:keypress="isLetter" type="text" placeholder="Name">
+                <input v-model="userPhoneNr" v-on:keypress="isNumber" type="text" placeholder="Phone Nr."> 
+                <button  v-bind:disabled="!activeCheckout" id="checkout_btn" v-bind:class="{ 'active_btn': activeCheckout }" v-on:click="sendOrder()">Checkout</button>
             </div>
-        
-            <button class="cart_button left" @click="changePage()">
-                <i class="fa-solid fa-arrow-left"><span>Back</span></i>
-            </button>
+            <span>{{ message }}</span>
+        </div>
     </div>
 </template>
 
@@ -59,13 +58,18 @@ export default {
 
     data: function() {
         return {
-            message: '',            //Message to dispaly after checkout
-            userPhoneNr: '',        //User Phone Number
-            userName: ''            //User name
+            message: '',      //Message to dispaly after checkout
+            userPhoneNr: '',  //User Phone Number
+            userName: ''      //User name
         }
     },
     
     methods: {
+        handleRemoveItem: function(idx, id) {
+            let value = { idx, id }
+            this.$emit('handleRemoveItem', value);
+        },
+
         //Check if input is a number
         isNumber: function(event) {
             if (!/\d+/.test(event.key) )
@@ -176,10 +180,9 @@ export default {
         }
     },
 }
-
 </script>
 
-
+<!-- Styles-->
 <style scoped>
 .container  {
     display: flex;
@@ -219,7 +222,6 @@ export default {
     margin-bottom: 150px;
 }
 
-
 .checkout {
     display: flex;
     flex-direction: column;
@@ -238,7 +240,6 @@ export default {
     width: 200px;
     height: 20px;
 }
-
 
 #checkout_btn {
     margin-top: 20px;
@@ -259,14 +260,4 @@ export default {
     color: white;
 }
 
-.left {
-    border-radius: 0px 20px 0px 0;
-    left: 0px;
-    bottom: 0px;
-}
-
-.left span {
-    position: relative;
-    top: -2px;
-}
 </style>

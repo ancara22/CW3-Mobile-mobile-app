@@ -15,6 +15,21 @@
         {
             "src": "img/icons/icon-512x512.png",
             "sizes": "512x512",
+            "type": "image/png",
+            "form_factor": "wide"
+        }
+
+    ],
+    "screenshots": [
+        {
+            "src": "img/icons/icon-512x512.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "form_factor": "wide"
+        },
+        {
+            "src": "img/icons/icon-512x512.png",
+            "sizes": "512x512",
             "type": "image/png"
         }
     ]

@@ -1,3 +1,4 @@
+<!-- Component templeate -->
 <template>
     <div>
         <div class="top_title">Lessons</div>
@@ -5,7 +6,8 @@
             <div class="search_bar">
                 <input @input="handleInputChange" type="text" placeholder="Search">
             </div>
-            
+
+            <!-- Filters Box -->
             <div class="container"> 
                 <div class="filters">
                     <div class="filter_title">Sort By:</div>
@@ -32,9 +34,10 @@
                         </label>
                     </form>
                 </div>
-        
+
+                <!-- Lessons box -->
                 <div id="lessons_box">
-                    <div class="lesson" v-for="lesson in sortedList" v-bind:key="lesson._id">
+                    <div class="lesson" v-for="lesson in searchedData" v-bind:key="lesson._id">
                         <div class="lesson_data">
                             <div class="subject">
                                 <span class="title">Subject: </span>
@@ -52,7 +55,7 @@
                                 <span class="title">Spaces: </span>
                                 <span class="content">{{ lesson.spaces}}</span>
                             </div>
-                            <button v-bind:disabled="isDisable(lesson.spaces)" v-bind:class="{disabled: isDisable(lesson.spaces), active: !isDisable(lesson.spaces)}" v-on:click="addToCart(lesson._id)">Add to cart</button>
+                            <button v-bind:disabled="isDisable(lesson.spaces)" v-bind:class="{disabled: isDisable(lesson.spaces), active: !isDisable(lesson.spaces)}" @click="handleAddItemToCart(lesson._id)">Add to cart</button>
                         </div>
                         <div class="icon">
                             <i v-bind:class="lesson.icon"></i>
@@ -61,15 +64,11 @@
                 </div>
              </div>
 
-            <button class="cart_button right" @click="changePage()" v-bind:disabled="isCartDisable()" v-bind:class="{disabledSc: isCartDisable(), activeSc: !isCartDisable()}">
-                <i class="fa-solid fa-cart-shopping"><span>Cart</span></i>
-                <p class="item_in_cart">{{ cartSize }}</p>
-            </button>
         </section>
     </div>
 </template>
 
-
+<!-- Script -->
 <script>
 export default {
     name: "Lessons-Page",
@@ -81,28 +80,14 @@ export default {
         }
     },
 
+    //Component props
     props: {
-        cartSize: {
-            type: Number
-        },
-        fetchData: {
-            type: Function
-        },
-        currentPage: {
-            type: Boolean,
-            require: true
-        },
-        lessonsList: {
-            type: Array,
-            require: true
-        },
-        addToCart: {
-            type: Function
-        },
-        changePage: {
-            type: Function,
-        }
-
+        cartSize: { type: Number },
+        fetchData: { type: Function },
+        currentPage: { type: Boolean },
+        lessonsList: { type: Array },
+        addToCart: { type: Function },
+        changePage: { type: Function }
     },
 
     computed: {
@@ -128,9 +113,15 @@ export default {
     },
 
     methods: {
+        //Handle and emit to the parent the search value change
         handleInputChange: function(event) {
             this.fetchData();
             this.$emit('searchValueChange', event);
+        },
+
+        //Handle and emit to the parent the search value change
+        handleAddItemToCart: function(id) {
+            this.$emit('addItemToCartEvent', id);
         },
 
         //Check if the lesson has more spaces
@@ -141,13 +132,15 @@ export default {
         //Check if the cart button is disabled
         isCartDisable: function() {
             return this.cartSize == 0;
-        }
+        },
+
+        
     }
 }
 
 </script>
 
-
+<!-- Styles -->
 <style scoped>
 .search_bar {
     position: relative;
@@ -204,35 +197,9 @@ export default {
     margin-left: 10px;
 }
 
-
-
 .disabled {
     background-color: rgb(206, 206, 206);
     color: gray;
-}
-
-
-
-.right {
-    border-radius: 20px 0px 0px 0;
-    right: 0px;
-    bottom: 0px;
-}
-
-.item_in_cart {
-    align-items: center;
-    position: absolute;
-    top: -5px;
-    right: 87px;
-    font-size: 14px;
-    padding: 3px;
-    color: black;
-    background-color: white;
-    border: 4px solid rgb(18, 18, 248);
-    border-radius: 50%;
-    min-width: 15px;
-    display: flex;
-    justify-content: center;
 }
 
 .active:hover {
@@ -245,15 +212,5 @@ export default {
     color: white;
 }
 
-.disabledSc {
-    background-color: rgb(179, 178, 178);
-}
-
-
-.disabledSc:hover {
-    transform: none;
-    background-color: rgb(179, 178, 178);
-    cursor:auto;
-}
 
 </style>

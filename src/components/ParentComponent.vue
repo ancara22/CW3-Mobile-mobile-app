@@ -1,15 +1,22 @@
+<!-- Component templeate -->
 <template>
     <div>
         <div v-if="currentPage == true">
-            <Lessons :cartSize="cartSize" :currentPage="currentPage" :addToCart=" addToCart" :lessonsList="lessonsList" v-on:searchValueChange="handleSearchValueChange"  :changePage=" changePage" :fetchData="fetchData"/>
+            <Lessons :cartSize="cartSize" :currentPage="currentPage" :lessonsList="lessonsList" :changePage="changePage" :fetchData="fetchData" v-on:searchValueChange="handleSearchValueChange" v-on:addItemToCartEvent="addToCart"/>
         </div>
         <div v-if="currentPage == false">
-            <Checkout :shopingCart="shopingCart" :changePage="changePage" :removeItem="removeItem" :cleanShopingCart="cleanShopingCart" />
+            <Checkout :shopingCart="shopingCart" :changePage="changePage" :cleanShopingCart="cleanShopingCart" v-on:handleRemoveItem="handleRemoveItem" />
         </div>
+
+        <!-- Page Switch button-->
+        <button class="cart_button" @click="changePage()" v-bind:disabled="isCartDisable() && currentPage" v-bind:class="{disabledSc: isCartDisable(), activeSc: !isCartDisable() || !currentPage,left: !currentPage, right: currentPage }">
+            <i class="fa-solid fa-cart-shopping"><span>Cart</span></i>
+            <p v-if="currentPage" class="item_in_cart">{{ cartSize }}</p>
+        </button>
     </div>
 </template>
 
-
+<!-- Script -->
 <script>
 import Lessons from "./Lessons.vue";
 import Checkout from "./Checkout.vue";
@@ -22,25 +29,30 @@ export default {
     },
     data() {
         return {
-            currentPage: true,
-            searchValue: '',
-            lessonsList: [],
-            shopingCart: [],
-            cartSize: 0
+            currentPage: true,  //Curent page swithcer
+            searchValue: '',    //Input search value
+            lessonsList: [],    //Lessons list
+            shopingCart: [],    //Shoping cart list
+            cartSize: 0         //Shoping cart size
        
         }
     },
 
+    //Get the lessons from DB on component mounted
     mounted: function() {
         this.fetchData();
     },
 
     methods: {
+        handleRemoveItem: function(value) {
+            let {idx, id} = value;
+            this.removeItem(idx,id);
+        },
+
+        //Handle the search value update
         handleSearchValueChange: function(event) {
             let { value } = event.target;
             this.searchValue = value;
-
-            console.log('first', this.searchValue)
         },
 
         //Fetch data from the database
@@ -89,23 +101,86 @@ export default {
             });
         },
 
+        //Clean the shoping cart
         cleanShopingCart: function() {
             this.shopingCart = [];
             this.cartSize = 0;
+        },
+
+        //Check if the cart button is disabled
+        isCartDisable: function() {
+            return this.cartSize == 0;
         }
             
     }
 }
-
-
 </script>
 
-
+<!-- Styles -->
 <style >
 * {
     touch-action: manipulation;
     margin: 0 auto;
     font-family: Arial, Helvetica, sans-serif;
+}
+
+
+.right {
+    border-radius: 20px 0px 0px 0;
+    right: 0px;
+    bottom: 0px;
+}
+
+.left {
+    margin: 0;
+    border-radius: 0px 20px 0px 0;
+    left: 0px;
+    bottom: 0px;
+}
+
+.left span {
+    position: relative;
+    top: -2px;
+}
+
+.item_in_cart {
+    align-items: center;
+    position: absolute;
+    top: -5px;
+    right: 87px;
+    font-size: 14px;
+    padding: 3px;
+    color: black;
+    background-color: white;
+    border: 4px solid rgb(18, 18, 248);
+    border-radius: 50%;
+    min-width: 15px;
+    display: flex;
+    justify-content: center;
+}
+
+
+.disabledSc {
+    background-color: rgb(179, 178, 178);
+}
+
+
+.disabledSc:hover {
+    transform: none;
+    background-color: rgb(179, 178, 178);
+    cursor:auto;
+}
+
+.activeSc {
+    background-color: rgb(18, 18, 248);
+}
+
+.activeSc:hover {
+    cursor: pointer;
+    transition: all 0.5s;
+    border: none;
+    transform: scale(1.4);
+    background-color: rgb(90, 90, 254);
 }
 
 .top_title {
@@ -126,7 +201,6 @@ export default {
     margin: 0;
     height: max-content;
 }
-
 
 .lesson {
     border-radius: 10px;
@@ -180,16 +254,10 @@ export default {
 
 
 
-.cart_button:hover {
-    cursor: pointer;
-    transition: all 0.5s;
-    border: none;
-}
 
 .cart_button {
     font-size: 1.5rem;
     color: white;
-    background-color: rgb(18, 18, 248);
     padding: 25px 15px 15px 15px;
     position: fixed;
     width: 100px;
@@ -202,8 +270,5 @@ export default {
     font-weight: 100;
 }
 
-.cart_button:hover {
-    transform: scale(1.4);
-    background-color: rgb(90, 90, 254);
-}
+
 </style>
