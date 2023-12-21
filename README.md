@@ -9,6 +9,8 @@ npm install
 ```
 npm run serve
 ```
+cd dist
+npx http-server
 
 ### Compiles and minifies for production
 ```
