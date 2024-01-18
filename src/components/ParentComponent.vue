@@ -36,23 +36,88 @@ export default {
             cartSize: 0         //Shoping cart size
        
         }
-    },
+    }, 
 
     //Get the lessons from DB on component mounted
     mounted: function() {
-        this.fetchData();
+        this.getData();
     },
 
     methods: {
         handleRemoveItem: function(value) {
             let {idx, id} = value;
-            this.removeItem(idx,id);
+            this.removeItem(idx, id);
         },
 
         //Handle the search value update
         handleSearchValueChange: function(event) {
             let { value } = event.target;
-            this.searchValue = value;
+        
+            if(value == '') {
+                this.searchValue = ' '
+                this.fetchData();
+            } else {
+                this.searchValue = value;
+            }
+        },
+
+        handleUpdateCache: function(event) {
+            let { value } = event.target;
+
+            console.log('value', value)
+        },
+
+        storeDataInTheCache: async function(key, data) {
+            try {
+                let cache = await caches.open('app-data');
+                let response = new Response(JSON.stringify(data));
+
+                await cache.put(key, response);
+                console.log('Data cached', data);
+            } catch(e) {
+                console.log('Error saving cache', e);
+            }
+        },
+
+        getDataFromTheCache: async function(key) {
+            try {
+                let cache = await caches.open('app-data');
+                let response = await cache.match(key);
+
+                if(response) {
+                    let data = await response.json();
+
+                    return data;
+                } 
+                return null;
+            } catch {
+                console.log("Error getting data from the cache");
+                return null;
+            }
+        },
+
+        getData: async function() {
+            let dataFromCache =  await this.getDataFromTheCache('lessons');
+
+            if(dataFromCache != null) {
+                this.lessonsList = dataFromCache;
+
+                let cartFromCache = await this.getDataFromTheCache('shopingCart');
+
+                if(cartFromCache != null) {
+                    this.shopingCart = cartFromCache;
+
+                    let cartSizeFromCache = await this.getDataFromTheCache('cartSize');
+                    this.cartSize = cartSizeFromCache;
+                } else {
+                    this.storeDataInTheCache("shopingCart", this.shopingCart);
+                }
+            } else {
+                this.fetchData();
+                console.log('Data fetched fro the network');
+            }
+
+
         },
 
         //Fetch data from the database
@@ -61,10 +126,13 @@ export default {
                 ).then(response => response.json()
                 ).then(data => { 
                     this.lessonsList = data;
+                    return this.storeDataInTheCache("lessons", data);
                 }).catch(error => {
                     console.error('Error loading data:', error);
                 });
         },
+
+
 
         //Event handler, on click go to Cart page
         changePage: function() {
@@ -81,11 +149,16 @@ export default {
                     }
             });
 
+            this.storeDataInTheCache('lessons', this.lessonsList);
+
             //Add the item to shopping Cart Array, update the cart size
             if(item.length > 0) {
                 this.shopingCart.push(...item);
                 this.cartSize++;
             }
+
+            this.storeDataInTheCache('cartSize', this.cartSize);
+            this.storeDataInTheCache('shopingCart', this.shopingCart);
         }, 
 
         //Remove items from the cart
@@ -94,17 +167,25 @@ export default {
             this.shopingCart.splice(idx, 1);
             this.cartSize--;
 
+            this.storeDataInTheCache('cartSize', this.cartSize);
+            this.storeDataInTheCache('shopingCart', this.shopingCart);
+
             //Update the available spaces
             this.lessonsList.map(lesson => { 
                 if(lesson._id == id && lesson.spaces < 5)  
                     lesson.spaces++;
             });
+
+            this.storeDataInTheCache('lessons', this.lessonsList);
+            
+
         },
 
         //Clean the shoping cart
         cleanShopingCart: function() {
             this.shopingCart = [];
             this.cartSize = 0;
+            this.fetchData();
         },
 
         //Check if the cart button is disabled

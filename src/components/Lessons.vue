@@ -37,7 +37,7 @@
 
                 <!-- Lessons box -->
                 <div id="lessons_box">
-                    <div class="lesson" v-for="lesson in searchedData" v-bind:key="lesson._id">
+                    <div class="lesson" v-for="lesson in sortedList" v-bind:key="lesson._id">
                         <div class="lesson_data">
                             <div class="subject">
                                 <span class="title">Subject: </span>
