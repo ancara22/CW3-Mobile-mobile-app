@@ -65,6 +65,7 @@ export default {
     },
     
     methods: {
+        //Handle Remove item
         handleRemoveItem: function(idx, id) {
             let value = { idx, id }
             this.$emit('handleRemoveItem', value);

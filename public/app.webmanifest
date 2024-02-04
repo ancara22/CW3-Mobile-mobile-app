@@ -2,7 +2,7 @@
     "name": "Lessons Booking App",
     "short_name": "LessonsApp",
     "description": "A mobile app for booking after school lessons",
-    "start_url": "/",
+    "start_url": "index.html",
     "display": "standalone",
     "background_color": "#5A5AFE",
     "theme_color": "#5A5AFE",

@@ -133,8 +133,6 @@ export default {
         isCartDisable: function() {
             return this.cartSize == 0;
         },
-
-        
     }
 }
 

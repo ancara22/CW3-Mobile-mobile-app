@@ -41,9 +41,11 @@ export default {
     //Get the lessons from DB on component mounted
     mounted: function() {
         this.getData();
+        //this.fetchData();
     },
 
     methods: {
+        // Handle Remove item
         handleRemoveItem: function(value) {
             let {idx, id} = value;
             this.removeItem(idx, id);
@@ -61,12 +63,7 @@ export default {
             }
         },
 
-        handleUpdateCache: function(event) {
-            let { value } = event.target;
-
-            console.log('value', value)
-        },
-
+        // Store App Data in the cache
         storeDataInTheCache: async function(key, data) {
             try {
                 let cache = await caches.open('app-data');
@@ -77,8 +74,9 @@ export default {
             } catch(e) {
                 console.log('Error saving cache', e);
             }
-        },
+        }, 
 
+        //Get App Data from cache
         getDataFromTheCache: async function(key) {
             try {
                 let cache = await caches.open('app-data');
@@ -96,6 +94,7 @@ export default {
             }
         },
 
+        //Get App data ( from Cache or Network )
         getData: async function() {
             let dataFromCache =  await this.getDataFromTheCache('lessons');
 
@@ -116,8 +115,6 @@ export default {
                 this.fetchData();
                 console.log('Data fetched fro the network');
             }
-
-
         },
 
         //Fetch data from the database
@@ -128,11 +125,10 @@ export default {
                     this.lessonsList = data;
                     return this.storeDataInTheCache("lessons", data);
                 }).catch(error => {
+
                     console.error('Error loading data:', error);
                 });
         },
-
-
 
         //Event handler, on click go to Cart page
         changePage: function() {
@@ -177,8 +173,6 @@ export default {
             });
 
             this.storeDataInTheCache('lessons', this.lessonsList);
-            
-
         },
 
         //Clean the shoping cart
@@ -191,8 +185,7 @@ export default {
         //Check if the cart button is disabled
         isCartDisable: function() {
             return this.cartSize == 0;
-        }
-            
+        }   
     }
 }
 </script>
