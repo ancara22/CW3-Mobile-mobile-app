@@ -2,7 +2,7 @@ const { defineConfig } = require('@vue/cli-service')
 
 module.exports = defineConfig({
   transpileDependencies: true,
-  publicPath: './CW3-Mobile-mobile-app/',
+ // publicPath: './',
   pwa: {
     pwa: {
       workboxPluginMode: 'InjectManifest',
