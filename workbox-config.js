@@ -1,10 +1,10 @@
 
 module.exports = {
-    "globDirectory": "dist/",
+    "globDirectory": "docs",
     "globPatterns": [
       "**/*.{html,js,css,png,jpg}"
     ],
-    "swDest": "dist/service-worker.js",
+    "swDest": "docs/service-worker.js",
     "swSrc": "src/service-worker.js",
     "maximumFileSizeToCacheInBytes": 5000000
   };

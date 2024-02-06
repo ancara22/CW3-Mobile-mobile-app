@@ -1,6 +1,14 @@
 <!-- Component templeate -->
 <template>
     <div>
+        <div id="fixHTTPbox">
+            <span>HTTPS Fix: </span>
+            <a v-bind:href="serverURL">Link</a>
+            <button @click="deleteCaches">Delete Caches</button>
+            <button @click="unregisterServiceWorkers">Unregister Service Workers</button>
+            <button @click="reloadPage">Reload Page</button>
+            
+        </div>
         <div v-if="currentPage == true">
             <Lessons :cartSize="cartSize" :currentPage="currentPage" :lessonsList="lessonsList" :changePage="changePage" :fetchData="fetchData" v-on:searchValueChange="handleSearchValueChange" v-on:addItemToCartEvent="addToCart"/>
         </div>
@@ -33,7 +41,8 @@ export default {
             searchValue: '',    //Input search value
             lessonsList: [],    //Lessons list
             shopingCart: [],    //Shoping cart list
-            cartSize: 0         //Shoping cart size
+            cartSize: 0,        //Shoping cart size
+            serverURL: `https://0zr0qu3hol.execute-api.eu-north-1.amazonaws.com/prod/lessons?src=`
        
         }
     }, 
@@ -185,7 +194,30 @@ export default {
         //Check if the cart button is disabled
         isCartDisable: function() {
             return this.cartSize == 0;
-        }   
+        },
+
+        //Remove all caches
+        deleteCaches: function() {
+            caches.keys().then((names) => {
+                for(let name of names) {
+                    caches.delete(name);
+                }
+            })
+        },
+
+        //Unregistre all service workers
+        unregisterServiceWorkers: function() {
+            navigator.serviceWorker.getRegistrations().then((registrations) => {
+                for(let reg of registrations) {
+                    reg.unregister()
+                }
+            })
+        },
+
+        //Reload Page
+        reloadPage() {
+            window.location.reload()
+        }
     }
 }
 </script>
@@ -326,9 +358,6 @@ export default {
     color: rgba(0, 0, 229, 0.495);
 }
 
-
-
-
 .cart_button {
     font-size: 1.5rem;
     color: white;
@@ -344,5 +373,17 @@ export default {
     font-weight: 100;
 }
 
+#fixHTTPbox {
+    font-size: 12px;
+    padding: 10px;
+}
+
+#fixHTTPbox  a {
+    margin-right: 10px;
+}
+
+#fixHTTPbox button {
+    cursor: pointer;
+}
 
 </style>
