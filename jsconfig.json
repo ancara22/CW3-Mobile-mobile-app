@@ -2,7 +2,7 @@
   "compilerOptions": {
     "target": "es5",
     "module": "esnext",
-    "baseUrl": "./CW3-Mobile-mobile-app/",
+    "baseUrl": "./",
     "moduleResolution": "node",
     "paths": {
       "@/*": [
