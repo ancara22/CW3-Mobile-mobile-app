@@ -22,5 +22,11 @@ npm run build
 npm run lint
 ```
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+### GitHub 
+
+https://github.com/ancara22/CW3-Mobile-mobile-app.git
+
+### GitHub Pgages
+```
+https://ancara22.github.io/CW3-Mobile-mobile-app/
+```

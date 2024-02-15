@@ -1,7 +1,7 @@
 <!-- Component templeate -->
 <template>
 	<div id="app">
-		<ParentComponent/>
+		<parent-component/>
 	</div>
 </template>
 
@@ -12,7 +12,7 @@ import ParentComponent from './components/ParentComponent.vue'
 export default {
 	name: 'App',
 	components: {
-		ParentComponent
+		"parent-component": ParentComponent
 	},
 
 	created() {

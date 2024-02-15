@@ -10,10 +10,10 @@
             
         </div>
         <div v-if="currentPage == true">
-            <Lessons :cartSize="cartSize" :currentPage="currentPage" :lessonsList="lessonsList" :changePage="changePage" :fetchData="fetchData" v-on:searchValueChange="handleSearchValueChange" v-on:addItemToCartEvent="addToCart"/>
+            <lessons-component :cartSize="cartSize" :lessonsList="lessonsList" :fetchData="fetchData" v-on:search-value-change="handleSearchValueChange" v-on:add-item-to-cart="addToCart"/>
         </div>
         <div v-if="currentPage == false">
-            <Checkout :shopingCart="shopingCart" :changePage="changePage" :cleanShopingCart="cleanShopingCart" v-on:handleRemoveItem="handleRemoveItem" />
+            <checkout-component :shopingCart="shopingCart" :cleanShopingCart="cleanShopingCart" v-on:remove-item-from-cart="handleRemoveItem" />
         </div>
 
         <!-- Page Switch button-->
@@ -30,10 +30,10 @@ import Lessons from "./Lessons.vue";
 import Checkout from "./Checkout.vue";
 
 export default {
-    name: "Lessons-Page",
+    name: "Parent-Component",
     components: {
-        Lessons,
-        Checkout
+        "lessons-component" : Lessons,
+        "checkout-component": Checkout
     },
     data() {
         return {

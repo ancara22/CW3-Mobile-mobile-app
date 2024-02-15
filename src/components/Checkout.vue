@@ -51,7 +51,6 @@ export default {
     name: "Checkout-Page",
     props: {
         shopingCart: { type: Array },
-        changePage: { type: Function },
         removeItem: { type: Function },
         cleanShopingCart: { type: Function }
     },
@@ -68,7 +67,7 @@ export default {
         //Handle Remove item
         handleRemoveItem: function(idx, id) {
             let value = { idx, id }
-            this.$emit('handleRemoveItem', value);
+            this.$emit('remove-item-from-cart', value);
         },
 
         //Check if input is a number

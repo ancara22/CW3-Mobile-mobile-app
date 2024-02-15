@@ -84,10 +84,8 @@ export default {
     props: {
         cartSize: { type: Number },
         fetchData: { type: Function },
-        currentPage: { type: Boolean },
         lessonsList: { type: Array },
         addToCart: { type: Function },
-        changePage: { type: Function }
     },
 
     computed: {
@@ -116,12 +114,12 @@ export default {
         //Handle and emit to the parent the search value change
         handleInputChange: function(event) {
             this.fetchData();
-            this.$emit('searchValueChange', event);
+            this.$emit('search-value-change', event);
         },
 
         //Handle and emit to the parent the search value change
         handleAddItemToCart: function(id) {
-            this.$emit('addItemToCartEvent', id);
+            this.$emit('add-item-to-cart', id);
         },
 
         //Check if the lesson has more spaces

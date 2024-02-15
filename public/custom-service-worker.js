@@ -5,7 +5,7 @@ self.addEventListener('install', event => {
       console.debug('Caching resources...');
       return cache.addAll([
         './index.html',
-        './manifest.json',
+        './manifest.webmanifest',
         './img/icons/icon-192x192.png',
         './img/icons/icon-512x512.png',
       ]);
