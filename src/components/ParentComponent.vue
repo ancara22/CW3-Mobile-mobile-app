@@ -9,17 +9,21 @@
             <button @click="reloadPage">Reload Page</button>
             
         </div>
-        <div v-if="currentPage == true">
-            <lessons-component :cartSize="cartSize" :lessonsList="lessonsList" :fetchData="fetchData" v-on:search-value-change="handleSearchValueChange" v-on:add-item-to-cart="addToCart"/>
-        </div>
-        <div v-if="currentPage == false">
-            <checkout-component :shopingCart="shopingCart" :cleanShopingCart="cleanShopingCart" v-on:remove-item-from-cart="handleRemoveItem" />
-        </div>
+        <component :is="currentComponent"
+            :shopingCart="shopingCart" 
+            :cartSize="cartSize" 
+            :lessonsList="lessonsList" 
+            :fetchData="fetchData" 
+            :cleanShopingCart="cleanShopingCart"
+            v-on:search-value-change="handleSearchValueChange" 
+            v-on:add-item-to-cart="addToCart"
+            v-on:remove-item-from-cart="handleRemoveItem"
+        ></component>
 
         <!-- Page Switch button-->
-        <button class="cart_button" @click="changePage()" v-bind:disabled="isCartDisable() && currentPage" v-bind:class="{disabledSc: isCartDisable(), activeSc: !isCartDisable() || !currentPage,left: !currentPage, right: currentPage }">
+        <button class="cart_button" @click="changePage()" v-bind:disabled="isCartDisable() && currentPage" v-bind:class="{disabledSc: isCartDisable(), activeSc: !isCartDisable() || !currentPage, left: !currentPage, right: currentPage }">
             <i class="fa-solid fa-cart-shopping"><span>Cart</span></i>
-            <p v-if="currentPage" class="item_in_cart">{{ cartSize }}</p>
+            <p v-if="currentPage" class="item_in_cart">{{ cartSize ? cartSize: 0}}</p>
         </button>
     </div>
 </template>
@@ -37,12 +41,13 @@ export default {
     },
     data() {
         return {
-            currentPage: true,  //Curent page swithcer
             searchValue: '',    //Input search value
             lessonsList: [],    //Lessons list
             shopingCart: [],    //Shoping cart list
             cartSize: 0,        //Shoping cart size
-            serverURL: `https://0zr0qu3hol.execute-api.eu-north-1.amazonaws.com/prod/lessons?src=`
+            serverURL: `https://0zr0qu3hol.execute-api.eu-north-1.amazonaws.com/prod/lessons?src=`,
+            currentPage: true,
+            currentComponent: Lessons
        
         }
     }, 
@@ -50,7 +55,7 @@ export default {
     //Get the lessons from DB on component mounted
     mounted: function() {
         this.getData();
-        //this.fetchData();
+        console.log('currentComponent === Lessons', this.currentComponent === Lessons)
     },
 
     methods: {
@@ -142,6 +147,12 @@ export default {
         //Event handler, on click go to Cart page
         changePage: function() {
             this.currentPage = !this.currentPage;
+
+            if(this.currentComponent == Lessons) {
+                this.currentComponent = Checkout;
+            } else {
+                this.currentComponent = Lessons
+            }
         },
 
         //Event handler, on button click add the item to shopping cart
