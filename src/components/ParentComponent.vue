@@ -55,7 +55,8 @@ export default {
     //Get the lessons from DB on component mounted
     mounted: function() {
         this.getData();
-        console.log('currentComponent === Lessons', this.currentComponent === Lessons)
+        this.cartSize == 0;
+     
     },
 
     methods: {
