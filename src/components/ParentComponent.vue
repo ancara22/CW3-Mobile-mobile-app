@@ -56,7 +56,7 @@ export default {
     mounted: function() {
         this.getData();
         this.cartSize == 0;
-     
+        
     },
 
     methods: {
@@ -85,7 +85,6 @@ export default {
                 let response = new Response(JSON.stringify(data));
 
                 await cache.put(key, response);
-                console.log('Data cached', data);
             } catch(e) {
                 console.log('Error saving cache', e);
             }
@@ -119,16 +118,18 @@ export default {
                 let cartFromCache = await this.getDataFromTheCache('shopingCart');
 
                 if(cartFromCache != null) {
-                    this.shopingCart = cartFromCache;
-
-                    let cartSizeFromCache = await this.getDataFromTheCache('cartSize');
-                    this.cartSize = cartSizeFromCache;
+                    console.log('cartFromCache', cartFromCache)
+                    this.shopingCart = cartFromCache; 
+                    this.cartSize = this.shopingCart.length;
                 } else {
                     this.storeDataInTheCache("shopingCart", this.shopingCart);
+
                 }
+
+                console.log('Data loaded from the catch');
             } else {
                 this.fetchData();
-                console.log('Data fetched fro the network');
+                console.log('Data fetched from the network');
             }
         },
 
