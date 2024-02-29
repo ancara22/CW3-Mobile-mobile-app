@@ -18,7 +18,7 @@ export default {
 	created() {
 		//Register the  service worker
 		if ('serviceWorker' in navigator) {
-		navigator.serviceWorker.register('./custom-service-worker.js', { scope: '/' })
+		navigator.serviceWorker.register('./custom-service-worker.js')
 			.then(registration => {
 				console.log('Custom Service Worker registered with scope:', registration.scope);
 			}).catch(error => {
